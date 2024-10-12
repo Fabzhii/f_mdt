@@ -12,3 +12,9 @@ FiveM MDT &amp; CAD System
  - Outfit Template URL einfügen
 
 ## Exports
+| Export             | Beschreibung |
+| ----------------- | ------------------------------------------------------------------ | 
+| exports[“f_mdt“]:setFlightMode(bool) | Setzt den Flugmodus damit der Spieler nicht mehr getrackt werden kann |
+| exports[“f_mdt“]:getFlightMode() | Returnt den Flugmodus des Spielers |
+| exports[“f_mdt“]:addDisatch(string(Muss ein Code sein), string, string, vector3) | Erstellt einen Dispatch |
+| exports[“f_mdt“]:openMDT() | Öffnet das MDT (Jobs Checks werden nicht umgangen) |
