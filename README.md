@@ -19,4 +19,15 @@ FiveM MDT &amp; CAD System
 | exports[“f_mdt“]:addDisatch(string(code, string, string, vector3) | Erstellt einen Dispatch |
 | exports[“f_mdt“]:openMDT() | Öffnet das MDT (Jobs Checks werden nicht umgangen) |
 
+## Inventory Item
+```
+["police_tablet"] = {
+    label = "MDT",
+    weight = 800,
+    client = {
+        export = "f_mdt.useTablet"
+    }
+},
+```
+
 
