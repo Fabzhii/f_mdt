@@ -76,7 +76,7 @@ FiveM MDT &amp; CAD System
   - Berechtigungen von Rängen ändern
   - Nutzer * Rechte geben
 - Panic
-  - Panic Button auslösen ()
+  - Panic Button auslösen 
 - Position
-  - Position übertragen ()
+  - Position übertragen 
 
