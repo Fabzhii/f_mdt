@@ -884,5 +884,12 @@ end)
 RegisterServerEvent('fmdt:button')
 AddEventHandler('fmdt:button', function(position, panic)
     local xPlayer = ESX.GetPlayerFromId(source)
-    TriggerClientEvent('fmdt:buttonClient', -1, position, panic, xPlayer.getName(), source)
+    for k,v in pairs(ESX.GetPlayers()) do 
+        local job = ESX.GetPlayerFromId(v).getJob().name
+        for o,i in pairs(Config.Tablet.access) do 
+            if i == job then 
+                TriggerClientEvent('fmdt:buttonClient', ESX.GetPlayerFromId(v).source, position, panic, xPlayer.getName(), source)
+            end 
+        end 
+    end 
 end)
