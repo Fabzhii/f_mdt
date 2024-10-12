@@ -1,0 +1,33 @@
+[
+    {
+        "categorie": "STVO",
+        "paragraphs": [
+            {
+                "description": "Bewegen zu schnell",
+                "label": "30 KM/H+",
+                "fine": 5500,
+                "prison": 30,
+                "c_service": null
+            },
+            {
+                "description": "Bewegen zu schnell 2",
+                "label": "60 KM/H+",
+                "fine": 7500,
+                "prison": 50,
+                "c_service": null
+            }
+        ]
+    },
+    {
+        "categorie": "WAFFG",
+        "paragraphs": [
+            {
+                "description": "Wenn ein Täter eine illegaler Waffe führt",
+                "label": "Illegaler Waffenbesitz",
+                "fine": 5500,
+                "prison": 50,
+                "c_service": 20
+            }
+        ]
+    }
+]

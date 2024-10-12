@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="coloris/coloris.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+
+        <div id="container">
+            <img id="tablet-frame" src="img/tablet.png" alt="tablet">
+            <div id="mdt">
+
+                <div id="error">
+                    <div id="error-header" class="fa-solid fa-circle-exclamation"></div>
+                    <div id="error-text">Du hast dafür keine Berechtigung</div>
+                </div>
+
+
+                <div id="sidebar">
+                    <img id="logo-image" src="img/logo.png" alt="logo">
+                    <div id="logo-barrier" class="barrier"></div>
+                    <div id="sidebar-buttons">
+                        <div class="sidebar-button" id="dashboard">Dashboard</div>
+                        <div class="sidebar-button" id="leitstelle">Leitstelle</div>
+                        <div class="sidebar-button" id="einwohner">Einwohnersuche</div>
+                        <div class="sidebar-button" id="fahrzeuge">Fahrzeugsuche</div>
+                        <div class="sidebar-button" id="waffen">Waffensuche</div>
+                        <div class="sidebar-button" id="tracking">Tracking</div>
+                        <div class="sidebar-button" id="dispatches">Dispatches</div>
+                        <div class="sidebar-button" id="listen">Listen</div>
+                        <div class="sidebar-button" id="rechner">Rechner</div>
+                        <div class="sidebar-button" id="einstellungen">Einstellungen</div>
+
+                         <div id="position">Position Button</div>
+                        <div id="panic">Panic Button</div>
+
+                    </div>
+                </div>
+
+                <div id="header">
+                    <h1 id="header1">Willkommen zurück, [NAME]</h1>
+                    <h2 id="header2">[RANG] | [JOB]</h2>
+                    <div id="header-barrier" class="barrier"></div>
+                </div>
+                <div id="sidebar-barrier" class="barrier"></div>
+                <div id="pages">
+
+                    <div id="dashboard-page" class="mdt-page">
+
+                        <div id="self-information">
+                            <h1 class="info-header1">Persönliche Informationen</h1>
+                            <h class="info-header2">Hier siehst du deinen aktuellen Status</h2>
+                            <div class="barrier info-barrier"></div>
+                            <div id="info-field">
+                                <div class="info-fields">
+                                    <h2 class="info-front">Name:</h2>
+                                    <h2 id="info-self-name" class="info-back">n/A</h2>
+                                </div>
+                                <div class="info-fields">
+                                    <h2 class="info-front">Callname:</h2>
+                                    <h2 id="info-self-callname" class="info-back">n/A</h2>
+                                </div>
+                                <div class="info-fields">
+                                    <h2 class="info-front">Status:</h2>
+                                    <h2 id="info-self-status" class="info-back">n/A</h2>
+                                </div>
+                                <div class="info-fields">
+                                    <h2 class="info-front">Position:</h2>
+                                    <h2 id="info-self-position" class="info-back">n/A</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="active-officers">
+                            <h1 class="info-header1">Aktive Beamte</h1>
+                            <h class="info-header2">Hier siehst du Beamte im Dienst</h2>
+                            <div class="barrier info-barrier"></div>
+                            <div id="active-officer-page"></div>
+                        </div>
+
+                        <div id="active-warrents">
+                            <h1 class="info-header1">Fahndungen</h1>
+                            <h class="info-header2">Hier siehst du die Most-Wanteds</h2>
+                            <div class="barrier info-barrier"></div>
+                            <div id="warrent-list"></div>
+                        </div>
+                        <div id="recent-calls">
+                            <h1 class="info-header1">Dispatches</h1>
+                            <h class="info-header2">Hier siehst du die letzten Dispatches</h2>
+                            <div class="barrier info-barrier"></div>
+                            <div id="call-list"></div>
+                        </div>
+                        <div id="general-information">
+                            <h1 class="info-header1">Informationen</h1>
+                            <h class="info-header2">Hier siehst du Infos von anderen Beamten</h2>
+                            <div class="barrier info-barrier"></div>
+                            <div id="info-button">Weitere Information Hinzufügen</div>
+                            <div id="info-list"></div>
+                        </div>
+                    </div>
+
+                    <div id="leitstelle-page" class="mdt-page">
+                        <div id="officer-information-stats">
+
+                            <div id="officer-information-stats-vehicle">
+                                <h1 class="info-header1">Fahrzeug Verteilung</h1>
+                                <h class="info-header2">Hier siehst du wie die Fahrzeuge aktuell verteilt sind</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Straßenwagen:</h2>
+                                        <h2 id="stats-street" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Offroad:</h2>
+                                        <h2 id="stats-offroad" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Highspeed:</h2>
+                                        <h2 id="stats-highspeed" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Helikopter:</h2>
+                                        <h2 id="stats-air" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="officer-information-stats-location">
+                                <h1 class="info-header1">Position Verteilung</h1>
+                                <h class="info-header2">Hier siehst du wie die Positionen aktuell verteilt sind</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Los Angeles:</h2>
+                                        <h2 id="stats-city" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Calofornia County:</h2>
+                                        <h2 id="stats-county" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Highway:</h2>
+                                        <h2 id="stats-highway" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Frei [Sondereinheit]:</h2>
+                                        <h2 id="stats-other" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="officer-information-stats-unit">
+                                <h1 class="info-header1">Unit Verteilung</h1>
+                                <h class="info-header2">Hier siehst du wie die Units aktuell verteilt sind</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Patrol Unit:</h2>
+                                        <h2 id="stats-patrol" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">King Unit:</h2>
+                                        <h2 id="stats-king" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">SWAT Unit:</h2>
+                                        <h2 id="stats-swat" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Gemeinsam:</h2>
+                                        <h2 id="stats-all" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="active-officer-main-field">
+                                <div id="add-self">
+
+                                    <div id="add-self-plus">+</div>
+                                    <div id="add-self-clicked">
+                                        <div class="add-self-select-button" id="add-self-name">[NAME]</div>
+                                        <div class="add-self-select-button" id="add-self-callname">[CALLNAME]</div>
+                                        <div class="add-self-select-button" id="add-self-status">[STATUS]</div>
+                                        <div class="add-self-select-button" id="add-self-location">[LOCATION]</div>
+                                        <div class="add-self-select-button" id="add-self-vehicle">[VEHICLE]</div>
+                                        <div class="add-self-select-button" id="add-self-frequency">[FREQUENCY]</div>
+                                        <div class="add-self-select-button" id="add-self-o1">[OFFICER I]</div>
+                                        <div class="add-self-select-button" id="add-self-o2">[OFFICER II]</div>
+                                        <div class="add-self-select-button" id="add-self-o3">[OFFICER III]</div>
+                                    </div>
+
+                                    <div id="add-self-clicked-options">
+                                        <div class="add-self-select-button-options" id="add-self-name-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-callname-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-status-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-location-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-vehicle-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-frequency-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-o1-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-o2-options"></div>
+                                        <div class="add-self-select-button-options" id="add-self-o3-options"></div>
+                                    </div>
+                                    
+                                    
+                                    <div id="officer-information-other"></div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="einwohner-page" class="mdt-page">
+                        <div>
+                            <h2 class="search-header">Einwohner Suchen</h2>
+                            <div class="search-div">
+                                <input type="text" id="search-einwohner-text" class="search-input" placeholder="Einwohnersuche">
+                                <div id="search-einwohner" class="search-select">Suchen</div>
+                                <div class="barrier search-barrier"></div>
+                            </div>
+                        </div>
+                        <div id="einwohner-search-field" class="search-field"></div>
+                        <div id="einwohner-selected">
+
+                            <div id="einwohner-selected-img-field">
+                            </div>
+
+                            <div id="einwohner-selected-information">
+                                <h1 class="info-header1">Informationen</h1>
+                                <h class="info-header2">Informationen der geöffneten Person</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Vorname:</h2>
+                                        <h2 id="officer-information-stats-field-name" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Nachname:</h2>
+                                        <h2 id="officer-information-stats-field-surname" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Geburtsdatum:</h2>
+                                        <h2 id="officer-information-stats-field-dob" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Geschlecht:</h2>
+                                        <h2 id="officer-information-stats-field-sex" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="einwohner-selected-data">
+                                <h1 class="info-header1">Personaldaten</h1>
+                                <div id="einwohner-selected-edit-data" class="einwohner-selected-edit fa-solid fa-pen-to-square"></div>
+                                <h class="info-header2">Personaldaten der geöffneten Person</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Telefonnummer:</h2>
+                                        <h2 id="officer-information-stats-field-telefon" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">E-Mail Adresse:</h2>
+                                        <h2 id="officer-information-stats-field-email" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Job:</h2>
+                                        <h2 id="officer-information-stats-field-job" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="einwohner-selected-warrant">
+                                <h1 class="info-header1">Fahndung</h1>
+                                <div id="einwohner-selected-edit-warrant" class="einwohner-selected-edit fa-solid fa-pen-to-square"></div>
+                                <h class="info-header2">Fahndung der geöffneten Person</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div class="officer-information-stats-field">
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Status:</h2>
+                                        <h2 id="officer-information-stats-field-warrant-state" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Grund:</h2>
+                                        <h2 id="officer-information-stats-field-warrant-reason" class="info-back">n/A</h2>
+                                    </div>
+                                    <div class="info-fields">
+                                        <h2 class="info-front">Info:</h2>
+                                        <h2 id="officer-information-stats-field-warrant-info" class="info-back">n/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="einwohner-selected-licenses">
+                                <h1 class="info-header1">Lizenzen</h1>
+                                <div id="einwohner-selected-edit-licenses" class="einwohner-selected-edit fa-solid fa-pen-to-square"></div>
+                                <h class="info-header2">Lizenzen der geöffneten Person</h2>
+                                <div class="barrier info-barrier"></div>
+                                <div id="einwohner-selected-licenses-data" class="officer-information-stats-field"></div>
+                            </div>
+
+                            <div id="einwohner-selected-information-field">
+                                <div id="einwohner-selected-notes">
+                                    <div class="einwohner-selected-header">Notizen</div>
+                                    <div id="einwohner-selected-notes-data"></div>
+                                </div>
+                                <div id="einwohner-selected-files">
+                                    <div class="einwohner-selected-header">Offene Akten</div>
+                                    <div id="einwohner-selected-files-data"></div>
+                                </div>
+                                <div id="einwohner-selected-closedfiles">
+                                    <div class="einwohner-selected-header">Geschlossene Akten</div>
+                                    <div id="einwohner-selected-closedfiles-data"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="vehicle-page" class="mdt-page">
+                        <div>
+                            <h2 class="search-header">Fahrzeuge Suchen</h2>
+                            <div class="search-div">
+                                <input type="text" id="search-fahrzeug-text" class="search-input" placeholder="Fahrzeugsuche">
+                                <div id="search-fahrzeug" class="search-select">Suchen</div>
+                                <div class="barrier search-barrier"></div>
+                            </div>
+                        </div>
+                        <div id="fahrzeug-search-field" class="search-field"></div>
+                    </div>
+
+                    <div id="weapon-page" class="mdt-page">
+                        <div>
+                            <h2 class="search-header">Waffen Suchen</h2>
+                            <div class="search-div">
+                                <input type="text" id="search-waffe-text" class="search-input" placeholder="Waffensuche">
+                                <div id="search-waffe" class="search-select">Suchen</div>
+                                <div class="barrier search-barrier"></div>
+                            </div>
+                        </div>
+                        <div id="waffe-search-field" class="search-field"></div>
+                    </div>
+
+                    <div id="tracking-page" class="mdt-page">
+                        <div id="number-tracking-information">
+                            <h1 class="info-header1">Telefonnummer Tracken</h1>
+                            <h2 class="info-header2">Tracke das Handy einer Person</h2>
+                            <input type="text" id="search-number-text" class="search-input" placeholder="Handynummer">
+                            <div id="search-number" class="search-select">Suchen</div>
+                            <div class="barrier track-barrier"></div>
+                            <div id="number-field">
+                                <div id="track-error-number" class="track-error">
+                                    <div id="track-error-number-header" class="track-header"></div>
+                                    <div id="track-error-number-text" class="track-text"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="plate-tracking-information">
+                            <h1 class="info-header1">Kennzeichen Tracken</h1>
+                            <h2 class="info-header2">Tracke das Fahrzeug einer Person</h2>
+                            <input type="text" id="search-plate-text" class="search-input" placeholder="Kennzeichen">
+                            <div id="search-plate" class="search-select">Suchen</div>
+                            <div class="barrier track-barrier"></div>
+                            <div id="plate-field">
+                                <div id="track-error-plate" class="track-error">
+                                    <div id="track-error-plate-header" class="track-header"></div>
+                                    <div id="track-error-plate-text" class="track-text"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="zoom-box">
+                            <img id="track-map" class="track-map" src="img/map.png" alt="map">
+                        </div>
+
+                    </div>
+
+                    <div id="dispatches-page" class="mdt-page">
+
+                        <div id="dispatches-page-dispatches-field">
+                            <h1 class="info-header1-2">Dispatches</h1>
+                            <h2 class="info-header2">Hier siehst du alle aktive Dispatches</h2>
+                            <div class="barrier dis-barrier"></div>
+                            <div id="call-list2"></div>
+                        </div>
+                    
+                        <div id="dispatches-page-officer-field">
+                            <h1 class="info-header1-2">Beamte</h1>
+                            <h2 class="info-header2">Hier siehst du alle aktive Beamte</h2>
+                            <div class="barrier dis-barrier"></div>
+                            <div id="active-officer-page2"></div>
+                        </div>
+                    
+                        <div id="zoom-box2">
+                            <img id="track-map2" class="track-map" src="img/map.png" alt="map">
+                        </div>
+                    </div>
+
+                    <div id="listen-page" class="mdt-page">
+                        <div id="list-header">
+                            <div id="l-officer" class="list-btn">Mitarbeiter</div>
+                            <div id="l-vehicles" class="list-btn">Fahrzeuge</div>
+                            <div id="l-outfits" class="list-btn">Kleidung</div>
+                            <div id="l-codecalls" class="list-btn">Codes / Funks</div>
+                            <div id="l-ausbildungen" class="list-btn">Ausbildungen</div>
+                            <div id="l-todos" class="list-btn">Todo Liste</div>
+                            <div id="l-law" class="list-btn">Gesetze</div>
+                        </div>
+                        <div id="list-body">
+                        </div>
+                    </div>
+
+                    <div id="einstellungen-page" class="mdt-page">
+                        <div id="einstellungen-grades"></div>
+                        <div id="einstellungen-officer"></div>
+                        <div id="einstellungen-settings">
+                            
+                            <div class="color-element">
+                                <div class="color-header">Hintergrund Primär</div>
+                                <div class="example square">
+                                    <input type="text" id="color-body" class="colorinput coloris instance1" value="rgb(6, 18, 39)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Hintergrund Sekundär</div>
+                                <div class="example square">
+                                    <input type="text" id="color-body2" class="colorinput coloris instance1" value="rgb(16, 32, 59)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Text</div>
+                                <div class="example square">
+                                    <input type="text" id="color-text" class="colorinput coloris instance1" value="rgb(244, 252, 255)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Text (Sekundär) / Rand</div>
+                                <div class="example square">
+                                    <input type="text" id="color-border" class="colorinput coloris instance1" value="rgb(134, 144, 160)">
+                                </div>
+                            </div>
+
+
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Grün)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-green" class="colorinput coloris instance1" value="rgb(29, 175, 87)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Blau)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-blue" class="colorinput coloris instance1" value="rgb(48, 106, 224)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Rot)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-red" class="colorinput coloris instance1" value="rgb(212, 57, 66)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Lila)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-purple" class="colorinput coloris instance1" value="rgb(214, 50, 201)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Grau)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-grey" class="colorinput coloris instance1" value="rgb(61, 56, 61)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Gelb)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-yellow" class="colorinput coloris instance1" value="rgb(233, 222, 69)">
+                                </div>
+                            </div>
+                            <div class="color-element">
+                                <div class="color-header">Markierung (Orange)</div>
+                                <div class="example square">
+                                    <input type="text" id="color-orange" class="colorinput coloris instance1" value="rgb(207, 125, 31)">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    
+
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function resizeUI() {
+                const container = document.getElementById('container');
+                const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+            window.addEventListener('resize', resizeUI);
+            window.addEventListener('load', resizeUI);
+        </script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="coloris/coloris.min.js"></script>
+        <script src="script.js"></script> 
+    </body>
+</html>
