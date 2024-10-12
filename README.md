@@ -38,14 +38,45 @@ FiveM MDT &amp; CAD System
   - Beamte
   - Dispatches
 - Leitstelle
+  - Möglichkeit sich einzutragen
+  - Verteilung der Einsatzkräfte
 - Einwohnersuche
+  - Einwohner Suchen
+  - Bilder nehmen
+  - Informationen über Personen
+  - Personaldaten setzen
+  - Fahnungen setzen
+  - Lizenzen setzen
+  - Notizen erstellen/löschen/bearbeiten
+  - Akten erstellen/löschen/bearbeiten
 - Fahrzeugsuche
+  - Fahrzeuge suchen
+  - Fahnung erstellen (Geplant)
 - Waffensuche
+  - Waffen suchen
+  - Fahnung erstellen (Geplant)
 - Tracking
+  - Kennzeichen tracken
+  - Telefonnummer tracken
 - Dispatches
+  - Dispatches einsehen
+  - Dispatches bearbeiten/löschen
+  - Beamte einteilen
 - Listen
+  - Mitarbeiter 
+  - Fahrzeug 
+  - Kleidung
+  - Codes / Funks
+  - Ausbildungen
+  - Todo Liste
+  - Gesetze
 - Rechner
+  - Strafen addieren
 - Einstellungen
+  - Berechtigungen von Rängen ändern
+  - Nutzer * Rechte geben
 - Panic
+  - Panic Button auslösen ()
 - Position
+  - Position übertragen ()
 
