@@ -30,4 +30,22 @@ FiveM MDT &amp; CAD System
 },
 ```
 
+## Funktionen
+- Dashboard
+  - Einsicht auf persönliche Informationen
+  - Fahndungen
+  - Globale Informationen
+  - Beamte
+  - Dispatches
+- Leitstelle
+- Einwohnersuche
+- Fahrzeugsuche
+- Waffensuche
+- Tracking
+- Dispatches
+- Listen
+- Rechner
+- Einstellungen
+- Panic
+- Position
 
