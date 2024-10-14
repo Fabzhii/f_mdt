@@ -68,8 +68,10 @@ ESX.RegisterServerCallback('fmdt:getCops', function(source, cb)
     local cops = {}
     for k,v in pairs(ESX.GetPlayers()) do 
         for o,i in pairs(Config.Tablet.access) do 
-            if i == ESX.GetPlayerFromId(v).getJob().name then 
-                table.insert(cops, v)
+            if ESX.GetPlayerFromId(v) ~= nil and json.encode(ESX.GetPlayerFromId(v)) ~= '[]' then 
+                if i == ESX.GetPlayerFromId(v).getJob().name then 
+                    table.insert(cops, v)
+                end
             end 
         end 
     end 
