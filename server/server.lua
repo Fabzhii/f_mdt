@@ -55,6 +55,29 @@ ESX.RegisterServerCallback('fmdt:getJob', function(source, cb)
     cb(xPlayer.getJob().name, xPlayer.getJob().grade)
 end)
 
+ESX.RegisterServerCallback('fmdt:getPermissions', function(source, cb)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local job, grade, identifier = xPlayer.getJob().name, xPlayer.getJob().grade_name, xPlayer.identifier
+
+    MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
+        ['@identifier'] = identifier,
+    }, function(data)
+        local userPermissions = json.decode(data[1].permission)
+        MySQL.Async.fetchAll('SELECT * FROM job_grades WHERE job_name = @job_name AND name = @name', {
+            ['@job_name'] = job,
+            ['@name'] = grade,
+        }, function(gdata)
+            local gradePermissions = json.decode(gdata[1].permissions)
+            if userPermissions == 1 then 
+                for k,v in pairs(gradePermissions) do 
+                    gradePermissions[k] = true
+                end 
+            end
+            cb(gradePermissions)
+        end)
+    end)
+end)
+
 ESX.RegisterServerCallback('fmdt:getSelfData', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
@@ -856,31 +879,6 @@ AddEventHandler('fmdt:setGradeSettings', function(job, grade, permission)
         ['@name'] = grade,
     })
     TriggerClientEvent('fmdt:updatePermissions', -1)
-end)
-
-ESX.RegisterServerCallback('fmdt:getPermissions', function(source, cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local job, grade, identifier = xPlayer.getJob().name, xPlayer.getJob().grade_name, xPlayer.identifier
-
-    MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
-        ['@identifier'] = identifier,
-    }, function(data)
-        local userPermissions = json.decode(data[1].permission)
-        MySQL.Async.fetchAll('SELECT * FROM job_grades WHERE job_name = @job_name AND name = @name', {
-            ['@job_name'] = job,
-            ['@name'] = grade,
-        }, function(gdata)
-            local gradePermissions = json.decode(gdata[1].permissions)
-            if userPermissions == 1 then 
-                for k,v in pairs(gradePermissions) do 
-                    gradePermissions[k] = true
-                end 
-            end
-
-            cb(gradePermissions)
-        end)
-    end)
-
 end)
 
 RegisterServerEvent('fmdt:button')
