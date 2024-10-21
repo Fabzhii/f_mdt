@@ -62,7 +62,7 @@ end)
 RegisterCommand(Config.Tablet.command, function()
     if Config.Tablet.itemrequired then 
         if exports.ox_inventory:Search('count', Config.Tablet.item) >= 1 then 
-            exports[GetCurrentResourceName()]:openMDT()
+            exports[GetCurrentResourceName()]:openMDT('dashboard')
         end 
     else 
         exports[GetCurrentResourceName()]:openMDT('dashboard')
