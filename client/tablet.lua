@@ -62,7 +62,7 @@ end)
 RegisterCommand(Config.Tablet.command, function()
     if Config.Tablet.itemrequired then 
         if exports.ox_inventory:Search('count', Config.Tablet.item) >= 1 then 
-            exports[GetCurrentResourceName()]:openMDT('dashboard')
+            exports[GetCurrentResourceName()]:openMDT()
         end 
     else 
         exports[GetCurrentResourceName()]:openMDT('dashboard')
@@ -325,36 +325,45 @@ Citizen.CreateThread(function()
 end)
 
 exports('panic', function()
-    if Config.CanBeTracked then 
-        TriggerServerEvent('fmdt:button', GetEntityCoords(PlayerPedId()), true)
-        ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xRank, xJob, xNumber, xCallNumber)
 
-            local dispatches = GlobalState.mdtCalls
-            table.insert(dispatches, {
-                code = 'Code-3',
-                reason = 'Panic Button',
-                time = GlobalState.time,
-                location = GetStreetNameFromHashKey(GetStreetNameAtCoord(GetEntityCoords(PlayerPedId()).x, GetEntityCoords(PlayerPedId()).y, GetEntityCoords(PlayerPedId()).z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())),
-                infos = (locales['panic'][1]):format(xName),
-                coords = GetEntityCoords(PlayerPedId()),
-                identifier = getIdentifier(dispatches),
-                officer = {},
-            })
-            TriggerServerEvent('fmdt:addDispatch', dispatches, true)
-        end)
-    end 
+    ESX.TriggerServerCallback('fmdt:getJob', function(name, grade)
+        for k,v in pairs(Config.Tablet.access) do 
+            if name == v then 
+                if Config.CanBeTracked then 
+                    TriggerServerEvent('fmdt:button', GetEntityCoords(PlayerPedId()), true)
+                    ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xRank, xJob, xNumber, xCallNumber)
+                        TriggerServerEvent('fmdt:addDispatch', {
+                            code = 'Code-3',
+                            reason = 'Panic Button',
+                            time = GlobalState.time,
+                            location = GetStreetNameFromHashKey(GetStreetNameAtCoord(GetEntityCoords(PlayerPedId()).x, GetEntityCoords(PlayerPedId()).y, GetEntityCoords(PlayerPedId()).z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())),
+                            infos = (locales['panic'][1]):format(xName),
+                            coords = GetEntityCoords(PlayerPedId()),
+                            identifier = getIdentifier(GlobalState.mdtCalls),
+                            officer = {},
+                        }, true)
+                    end)
+                end 
+            end 
+        end 
+    end)
 end)
 
 exports('position', function()
     if Config.CanBeTracked then 
-        TriggerServerEvent('fmdt:button', GetEntityCoords(PlayerPedId()), false)
+        ESX.TriggerServerCallback('fmdt:getJob', function(name, grade)
+            for k,v in pairs(Config.Tablet.access) do 
+                if name == v then 
+                    TriggerServerEvent('fmdt:button', GetEntityCoords(PlayerPedId()), false)
+                end
+            end
+        end)
     end 
 end)
 
 RegisterNetEvent('fmdt:buttonClient')
 AddEventHandler('fmdt:buttonClient', function(position, panic, name, id)
-    --if id == GetPlayerServerId(PlayerId()) then 
-    if id == 0 then 
+    if id == GetPlayerServerId(PlayerId()) then 
         if panic then 
             Config.Notifcation(locales['pressed_panic'])
             SendNUIMessage({
