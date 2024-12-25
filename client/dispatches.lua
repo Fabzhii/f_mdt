@@ -2,19 +2,16 @@
 locales = Config.Locales[Config.Language]
 
 exports('addDisptach', function(code, reason, infos, coords)
-    local dispatches = GlobalState.mdtCalls
-    table.insert(dispatches, {
+    TriggerServerEvent('fmdt:addDispatch', {
         code = code,
         reason = reason,
         time = GlobalState.time,
         location = GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())),
         infos = infos,
         coords = coords,
-        identifier = getIdentifier(dispatches),
+        identifier = getIdentifier(GlobalState.mdtCalls),
         officer = {},
     })
-
-    TriggerServerEvent('fmdt:addDispatch', dispatches)
 end)
 
 Citizen.CreateThread(function()
