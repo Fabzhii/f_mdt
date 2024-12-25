@@ -14,8 +14,12 @@ AddEventHandler('business:dispatch:sendmessage', function(source, message, sende
 end)
 
 RegisterServerEvent('fmdt:addDispatch')
-AddEventHandler('fmdt:addDispatch', function(dispatches, silent)
-    GlobalState.mdtCalls = dispatches
+AddEventHandler('fmdt:addDispatch', function(dispatch, silent)
+
+    local currentDispatches = GlobalState.mdtCalls
+    table.insert(currentDispatches, dispatch)
+    GlobalState.mdtCalls = currentDispatches
+
     if silent ~= true then 
         for k,v in pairs(ESX.GetPlayers()) do 
             local job = ESX.GetPlayerFromId(v).getJob().name
@@ -26,6 +30,44 @@ AddEventHandler('fmdt:addDispatch', function(dispatches, silent)
             end 
         end 
     end 
+end)
+
+RegisterServerEvent('fmdt:removeDispatch')
+AddEventHandler('fmdt:removeDispatch', function(dispatchId)
+
+    local currentDispatches = GlobalState.mdtCalls
+    
+    for k,v in pairs(currentDispatches) do 
+        if v.identifier == dispatchId then 
+            table.remove(currentDispatches, k)
+            break
+        end 
+    end 
+
+    GlobalState.mdtCalls = currentDispatches
+
+end)
+
+RegisterServerEvent('fmdt:editDispatch')
+AddEventHandler('fmdt:editDispatch', function(dispatchId, code, officer)
+
+    local currentDispatches = GlobalState.mdtCalls
+    
+    for k,v in pairs(currentDispatches) do 
+        if v.identifier == dispatchId then 
+
+            if code ~= nil then 
+                currentDispatches[k].code = code
+            end 
+            if officer ~= nil then 
+                currentDispatches[k].officer = officer
+            end 
+            break
+        end 
+    end 
+
+    GlobalState.mdtCalls = currentDispatches
+
 end)
 
 Citizen.CreateThread(function()
@@ -55,35 +97,12 @@ ESX.RegisterServerCallback('fmdt:getJob', function(source, cb)
     cb(xPlayer.getJob().name, xPlayer.getJob().grade)
 end)
 
-ESX.RegisterServerCallback('fmdt:getPermissions', function(source, cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local job, grade, identifier = xPlayer.getJob().name, xPlayer.getJob().grade_name, xPlayer.identifier
-
-    MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
-        ['@identifier'] = identifier,
-    }, function(data)
-        local userPermissions = json.decode(data[1].permission)
-        MySQL.Async.fetchAll('SELECT * FROM job_grades WHERE job_name = @job_name AND name = @name', {
-            ['@job_name'] = job,
-            ['@name'] = grade,
-        }, function(gdata)
-            local gradePermissions = json.decode(gdata[1].permissions)
-            if userPermissions == 1 then 
-                for k,v in pairs(gradePermissions) do 
-                    gradePermissions[k] = true
-                end 
-            end
-            cb(gradePermissions)
-        end)
-    end)
-end)
-
 ESX.RegisterServerCallback('fmdt:getSelfData', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
         ['@identifier']  = xPlayer.identifier,
     }, function(data)
-        cb(xPlayer.getName(), xPlayer.getJob().grade_label, xPlayer.getJob().label, data[1].phone_number, data[1].callNumber)
+        cb(xPlayer.getName(), xPlayer.getJob().grade_label, xPlayer.getJob().label, data[1].phone_number, data[1].callNumber, xPlayer.getJob().grade)
     end)
 end)
 
@@ -471,6 +490,7 @@ ESX.RegisterServerCallback('fmdt:listGetOfficers', function(source, cb)
                         badgeNumber = v.badgeNumber  or 'n/A',
                         callNumber = v.callNumber  or 'n/A',
                         phoneNumber = v.phone_number or 'n/A',
+                        unit = v.unit or 'patrol',
                         dob = v.dateofbirth,
                     })
                 end 
@@ -534,13 +554,18 @@ ESX.RegisterServerCallback('fmdt:officerGetGradeOptions', function(source, cb, i
 end)
 
 RegisterServerEvent('fmdt:updateOfficer')
-AddEventHandler('fmdt:updateOfficer', function(identifier, newGrade, newCallNumber, newBadgeNumber)
+AddEventHandler('fmdt:updateOfficer', function(identifier, newGrade, newCallNumber, newBadgeNumber, newUnit)
     MySQL.Async.execute('UPDATE users SET callNumber = @callNumber WHERE identifier = @identifier', {
         ['@callNumber']  = tonumber(newCallNumber),
         ['@identifier'] = identifier,
     })
     MySQL.Async.execute('UPDATE users SET badgeNumber = @badgeNumber WHERE identifier = @identifier', {
         ['@badgeNumber']  = newBadgeNumber,
+        ['@identifier'] = identifier,
+    })
+
+    MySQL.Async.execute('UPDATE users SET unit = @unit WHERE identifier = @identifier', {
+        ['@unit']  = newUnit,
         ['@identifier'] = identifier,
     })
     
@@ -806,8 +831,14 @@ ESX.RegisterServerCallback('fmdt:listGetAllOfficers', function(source, cb)
 end)
 
 RegisterServerEvent('fmdt:addAusbildung')
-AddEventHandler('fmdt:addAusbildung', function(label, description, date, officers, creator)
-    MySQL.insert("INSERT INTO `f_mdt_trainings` (`label`, `description`, `supervisor`, `time`, `list`) VALUES (?, ?, ?, ?, ?)", {label, description, creator, date, json.encode(officers)})
+AddEventHandler('fmdt:addAusbildung', function(label, description, date, location, limit, officers, supervisor, creator)
+
+    local sup = creator
+    if supervisor ~= nil and supervisor ~= '' then 
+        sup = sup .. '\n' .. supervisor
+    end 
+
+    MySQL.insert("INSERT INTO `f_mdt_trainings` (`label`, `description`, `supervisor`, `time`, `location`, `list`, `limit`) VALUES (?, ?, ?, ?, ?, ?, ?)", {label, description, sup, date, location, json.encode(officers), limit})
 end)
 
 RegisterServerEvent('fmdt:ausbildungListUpdate')
@@ -824,6 +855,18 @@ AddEventHandler('fmdt:ausbildungListUpdate', function(identifier, ausbildung)
         ['@time'] = ausbildung.time,
         ['@identifier'] = identifier,
     })
+    MySQL.Async.execute('UPDATE f_mdt_trainings SET location = @location WHERE identifier = @identifier', {
+        ['@location'] = ausbildung.location,
+        ['@identifier'] = identifier,
+    })
+    MySQL.Async.execute('UPDATE f_mdt_trainings SET supervisor = @supervisor WHERE identifier = @identifier', {
+        ['@supervisor'] = ausbildung.supervisor,
+        ['@identifier'] = identifier,
+    })
+    MySQL.Async.execute('UPDATE f_mdt_trainings SET `limit` = @limit WHERE identifier = @identifier', {
+        ['@limit'] = tonumber(ausbildung.limit),
+        ['@identifier'] = identifier,
+    })
     MySQL.Async.execute('UPDATE f_mdt_trainings SET list = @list WHERE identifier = @identifier', {
         ['@list'] = json.encode(ausbildung.list),
         ['@identifier'] = identifier,
@@ -837,6 +880,34 @@ AddEventHandler('fmdt:listDeleteAusbildung', function(identifier)
     },function()
     end)
 end)
+
+RegisterServerEvent('fmdt:addTrainingToPlayers')
+AddEventHandler('fmdt:addTrainingToPlayers', function(training, players)
+
+    for k,v in pairs(players) do 
+        MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
+            ['@identifier'] = v,
+        }, function(data)
+            local trainings = json.decode(data[1].trainings)
+            local found = false 
+
+            for o, i in pairs(trainings) do 
+                if i == training then 
+                    found = true
+                end 
+            end 
+
+            if not found then 
+                table.insert(trainings, training)
+                MySQL.Async.execute('UPDATE users SET trainings = @trainings WHERE identifier = @identifier', {
+                    ['@trainings'] = json.encode(trainings),
+                    ['@identifier'] = v,
+                })
+            end 
+        end)
+    end 
+end)
+
 
 ESX.RegisterServerCallback('fmdt:settingsGetOfficer', function(source, cb, identifier)
     MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
@@ -879,6 +950,31 @@ AddEventHandler('fmdt:setGradeSettings', function(job, grade, permission)
         ['@name'] = grade,
     })
     TriggerClientEvent('fmdt:updatePermissions', -1)
+end)
+
+ESX.RegisterServerCallback('fmdt:getPermissions', function(source, cb)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local job, grade, identifier = xPlayer.getJob().name, xPlayer.getJob().grade_name, xPlayer.identifier
+
+    MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
+        ['@identifier'] = identifier,
+    }, function(data)
+        local userPermissions = json.decode(data[1].permission)
+        MySQL.Async.fetchAll('SELECT * FROM job_grades WHERE job_name = @job_name AND name = @name', {
+            ['@job_name'] = job,
+            ['@name'] = grade,
+        }, function(gdata)
+            local gradePermissions = json.decode(gdata[1].permissions)
+            if userPermissions == 1 then 
+                for k,v in pairs(gradePermissions) do 
+                    gradePermissions[k] = true
+                end 
+            end
+
+            cb(gradePermissions)
+        end)
+    end)
+
 end)
 
 RegisterServerEvent('fmdt:button')
