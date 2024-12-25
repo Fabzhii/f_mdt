@@ -563,12 +563,7 @@ RegisterNUICallback('editDispatch', function(data, cb)
         {type = 'select', label = Config.Menus.edit_dispatch.code, required = true, options = options, default = code},
     })
     if input ~= nil then 
-        for k,v in pairs(dispatches) do 
-            if v.identifier == identifier then
-                dispatches[k].code = input[1]
-            end 
-        end 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+        TriggerServerEvent('fmdt:editDispatch', identifier, input[1], nil)
     end 
 
     Citizen.Wait(20)
@@ -596,13 +591,7 @@ RegisterNUICallback('deleteDispatch', function(data, cb)
         }
     })
     if alert == 'confirm' then 
-        local dispatches = GlobalState.mdtCalls
-        for k,v in pairs(dispatches) do 
-            if v.identifier == identifier then
-                table.remove(dispatches, k)
-            end 
-        end 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+        TriggerServerEvent('fmdt:removeDispatch', identifier)
     end
 
     Citizen.Wait(20)
@@ -640,12 +629,7 @@ RegisterNUICallback('officerDispatch', function(data, cb)
             {type = 'multi-select', label = Config.Menus.edit_dispatch_officers.officer, options = options, default = officers, searchable = true},
         })
         if input ~= nil then 
-            for k,v in pairs(dispatches) do 
-                if v.identifier == identifier then
-                    dispatches[k].officer = input[1]
-                end 
-            end 
-            TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+            TriggerServerEvent('fmdt:editDispatch', identifier, nil, input[1])
         end 
 
         Citizen.Wait(20)
@@ -721,21 +705,25 @@ RegisterNUICallback('setOfficerDispatch', function(data, cb)
         })
         if input ~= nil then 
             for k,v in pairs(dispatches) do 
+                Citizen.Wait(5)
                 for o,i in pairs(v.officer) do 
                     if i == name then 
-                        table.remove((dispatches[k].officer), o)
+                        local newOfficer = v.officer
+                        table.remove(newOfficer, o)
+                        TriggerServerEvent('fmdt:editDispatch', v.identifier, nil, newOfficer)
                     end 
                 end 
 
                 for o,i in pairs(input[1]) do 
                     if i == v.identifier then 
-                        table.insert((dispatches[k].officer), name)
+                        local newOfficer = v.officer
+                        table.insert(newOfficer, name)
+                        TriggerServerEvent('fmdt:editDispatch', v.identifier, nil, newOfficer)
                     end 
                 end
             end 
         end 
 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
         Citizen.Wait(20)
         exports[GetCurrentResourceName()]:openMDT('dispatches')
         cb()
@@ -797,14 +785,20 @@ RegisterNUICallback('officerListEdit', function(data, cb)
     PlaySoundFrontend(-1, "PIN_BUTTON", "ATM_SOUNDS", 1)
     ESX.TriggerServerCallback('fmdt:officerGetGradeOptions', function(officersGrade, grades)
         local officer = data.officer
+        local options = {}
+
+        for k,v in pairs(Config.Units) do 
+            table.insert(options, {value = v.id, label = v.name})
+        end 
 
         local input = lib.inputDialog(Config.Menus.officer_edit.header, {
             {type = 'select', label = Config.Menus.officer_edit.rank, options = grades, default = officersGrade, required = true},
             {type = 'number', label = Config.Menus.officer_edit.callNumber, default = officer.callNumber, required = true, min = 1, max = 999},
             {type = 'input', label = Config.Menus.officer_edit.badgeNumber, default = officer.badgeNumber, required = true, description = 'XX-XXX', min = 6, max = 6},
+            {type = 'select', label = Config.Menus.officer_edit.unit, default = officer.unit, required = true, options = options},
         })
         if input ~= nil then 
-            TriggerServerEvent('fmdt:updateOfficer', officer.identifier, input[1], input[2], input[3])
+            TriggerServerEvent('fmdt:updateOfficer', officer.identifier, input[1], input[2], input[3], input[4])
         end 
     end, (data.officer.identifier))
 
@@ -882,7 +876,6 @@ end)
 
 RegisterNUICallback('listGetVehicles', function(data, cb)
     ESX.TriggerServerCallback('fmdt:listGetVehicles', function(vehicles)
-
         if not Config.Lists.vehicles.showEmptyCategories then 
             local remove = {}
             for k,v in pairs(vehicles) do 
@@ -1252,14 +1245,28 @@ end)
 
 RegisterNUICallback('listGetAusbildungen', function(data, cb)
     ESX.TriggerServerCallback('fmdt:listGetAusbildungen', function(xData)
-        ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xGrade, xJob)
+        ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xGrade, xJob, number, callNumber, gradeNumber)
             local ausbildungen = xData
             for k,v in pairs(ausbildungen) do 
+
+                for o,i in pairs(Config.Trainings) do 
+                    if (i.id == ausbildungen[k].label) and i.mingrade > gradeNumber then 
+                        ausbildungen[k].invisible = true
+                    end 
+                end 
+
                 ausbildungen[k].asigned = false 
                 ausbildungen[k].list = json.decode(v.list)
+
                 for o,i in pairs(v.list) do 
                     if i == xName then 
                         ausbildungen[k].asigned = true
+                    end 
+                end                 
+
+                for o,i in pairs(Config.Trainings) do 
+                    if i.id == ausbildungen[k].label then 
+                        ausbildungen[k].label = i.name
                     end 
                 end 
             end
@@ -1273,15 +1280,22 @@ RegisterNUICallback('ausbildungListAdd', function(data, cb)
     ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xGrade, xJob)
         ESX.TriggerServerCallback('fmdt:listGetAllOfficers', function(xOfficers)
 
+            local trainings = {}
+            for k,v in pairs(Config.Trainings) do 
+                table.insert(trainings, {value = v.id, label = v.name})
+            end 
+
             local input = lib.inputDialog(Config.Menus.training_add.header, {
-                {type = 'input', label = Config.Menus.training_add.label, required = true, min = 4, max = 30},
+                {type = 'select', label = Config.Menus.training_add.label, options = trainings, required = true},
                 {type = 'textarea', label = Config.Menus.training_add.description, min = 5, autosize = true},
                 {type = 'date', label = Config.Menus.training_add.time, required = true, returnString = true},
-                {type = 'multi-select', label = Config.Menus.training_add.officer, searchable = true, options = xOfficers},
-                
+                {type = 'input', label = Config.Menus.training_add.location, required = true, min = 3, max = 50},
+                {type = 'slider', label = Config.Menus.training_add.limit, required = true, min = 1, max = 25, step = 1},
+                {type = 'multi-select', label = Config.Menus.training_add.officer, searchable = true, options = xOfficers, clearable = true},
+                {type = 'select', label = Config.Menus.training_add.supervisor, searchable = true, options = xOfficers, clearable = true},
             })
             if input ~= nil then 
-                TriggerServerEvent('fmdt:addAusbildung', input[1], input[2], input[3], input[4], (xGrade .. ' - ' .. xName))
+                TriggerServerEvent('fmdt:addAusbildung', input[1], input[2], input[3], input[4], input[5], input[6], input[7], xName)
             end
 
             Citizen.Wait(200)
@@ -1293,7 +1307,7 @@ end)
 
 RegisterNUICallback('ausbildungListAsign', function(data, cb)
     PlaySoundFrontend(-1, "PIN_BUTTON", "ATM_SOUNDS", 1)
-    ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xGrade, xJob)
+    ESX.TriggerServerCallback('fmdt:getSelfData', function(xName, xGrade, xJob, number, callNumber, gradeNumber)
         local ausbildung = data.ausbildung
 
         local found = false 
@@ -1319,26 +1333,59 @@ end)
 
 RegisterNUICallback('ausbildungListDelete', function(data, cb)
     PlaySoundFrontend(-1, "PIN_BUTTON", "ATM_SOUNDS", 1)
-    local ausbildung = data.ausbildung
+    ESX.TriggerServerCallback('fmdt:listGetAllOfficers', function(xOfficers)
+        local ausbildung = data.ausbildung
 
-    local alert = lib.alertDialog({
-        header = Config.Menus.training_delete.header,
-        content = (Config.Menus.training_delete.text):format(ausbildung.label),
-        centered = true,
-        cancel = true,
-        size = 'xs',
-        labels = {
-            confirm = Config.Menus.training_delete.confirm,
-            cancel = Config.Menus.training_delete.cancel,
-        }
-    })
-    if alert == 'confirm' then 
-        TriggerServerEvent('fmdt:listDeleteAusbildung', ausbildung.identifier)
-    end
 
-    Citizen.Wait(200)
+        local id
+        local options = {}
+        for k,v in pairs(Config.Trainings) do 
+            if v.name == ausbildung.label then 
+                id = v.id
+            end 
+        end 
 
-    cb()
+        for k,v in pairs(ausbildung.list) do 
+            table.insert(options, {
+                type = 'checkbox',
+                label = v,
+                description = Config.Menus.training_delete.done,
+            })
+        end 
+
+        local input = lib.inputDialog(Config.Menus.training_delete.header, options)
+
+
+        if input ~= nil then 
+
+            local addTraining = {}
+
+            for k,v in pairs(input) do 
+                if v == true then 
+                    local name = (ausbildung.list)[k]
+                    local identifier
+
+                    for o,i in pairs(xOfficers) do 
+                        if i.label == name then 
+                            identifier = i.identifier
+                        end 
+                    end 
+
+                    if identifier ~= nil then 
+                        table.insert(addTraining, identifier)
+                    end 
+
+                end 
+            end 
+
+            TriggerServerEvent('fmdt:addTrainingToPlayers', id, addTraining)
+            TriggerServerEvent('fmdt:listDeleteAusbildung', ausbildung.identifier)
+        end
+
+        Citizen.Wait(200)
+
+        cb()
+    end)
 end)
 
 RegisterNUICallback('ausbildungListEdit', function(data, cb)
@@ -1347,18 +1394,41 @@ RegisterNUICallback('ausbildungListEdit', function(data, cb)
         ESX.TriggerServerCallback('fmdt:listGetAllOfficers', function(xOfficers)
             local ausbildung = data.ausbildung
 
+            local trainings = {}
+            local default
+            for k,v in pairs(Config.Trainings) do 
+                if v.name == ausbildung.label then 
+                    default = v.id
+                end 
+                table.insert(trainings, {value = v.id, label = v.name})
+            end 
+
+            local supervisor1 = (ausbildung.supervisor):match("(.*)\n")
+            local supervisor2 = (ausbildung.supervisor):match("\n(.*)")
+            
             local input = lib.inputDialog(Config.Menus.training_add.header, {
-                {type = 'input', label = Config.Menus.training_add.label, required = true, min = 4, max = 30, default = ausbildung.label},
+                {type = 'select', label = Config.Menus.training_add.label, options = trainings, required = true, default = default},
                 {type = 'textarea', label = Config.Menus.training_add.description, min = 5, autosize = true, default = ausbildung.description},
                 {type = 'date', label = Config.Menus.training_add.time, required = true, returnString = true, default = ausbildung.time},
-                {type = 'multi-select', label = Config.Menus.training_add.officer, searchable = true, options = xOfficers, default = ausbildung.list},
-                
+                {type = 'input', label = Config.Menus.training_add.location, required = true, min = 3, max = 50, default = ausbildung.location},
+                {type = 'slider', label = Config.Menus.training_add.limit, required = true, min = 1, max = 25, step = 1, default = ausbildung.limit},
+                {type = 'multi-select', label = Config.Menus.training_add.officer, searchable = true, options = xOfficers, clearable = true, default = ausbildung.list},
+                {type = 'select', label = Config.Menus.training_add.supervisor, searchable = true, options = xOfficers, clearable = true, default = supervisor2},
             })
+
+            
+
             if input ~= nil then 
                 ausbildung.label = input[1]
                 ausbildung.description = input[2]
-                ausbildung.time = input[3]
-                ausbildung.list = input[4]
+                if input[3] ~= 'Invalid Date' then 
+                    ausbildung.time = input[3]
+                end 
+                ausbildung.location = input[4]
+                ausbildung.limit = input[5]
+                ausbildung.supervisor = supervisor1 .. '\n' .. input[7]
+                ausbildung.list = input[6]
+
                 TriggerServerEvent('fmdt:ausbildungListUpdate', ausbildung.identifier, ausbildung)
             end
 
