@@ -1,6 +1,6 @@
 Config = {}
 
-Config.ApiKey = ''
+Config.ApiKey = '27043423ed59abfaebd689570061bb48'
 
 Config.Tablet = {
     itemrequired = false,
@@ -49,6 +49,7 @@ Config.Permissions = {
         openTracking = 'Tracking-Menü öffnen', 
         openDispatches = 'Dispatches-Menü öffnen', 
         openLists = 'Listen-Menü öffnen', 
+        openDocuments = 'Dokumenten-Mneü öffnen',
         openCalculator = 'Rechner-Menü öffnen', 
         openSettings = 'Einstellungen-Menü öffnen', 
 
@@ -89,13 +90,13 @@ Config.Permissions = {
 
 Config.Lists = {
     employees = {
-        showEmptyGrades = false,
+        showEmptyGrades = true,
     },
     vehicles = {
-        showEmptyCategories = false,
+        showEmptyCategories = true,
     },
     outfits = {
-        defaultURL = '',
+        defaultURL = 'https://cdn.discordapp.com/attachments/1101547475346665573/1292165814476341248/no-outfit.png?ex=6702beb1&is=67016d31&hm=a99f3495b3995be9f664852046fa4bb99dfc45e395e56302265bc690c5926081&',
     },
     law = {
         fine = {
@@ -113,48 +114,71 @@ Config.Lists = {
     }
 }
 
-Config.Trainings = {
+Config.Units = {
     {
-        id = 'gab',
-        name = 'Grundausbildung',
-        text = 'Mit dieser Ausbildung schließen Beamten ihre Testphase als Rookie ab und können dien Dienst als Officer antreten.',
-        mingrade = 1,
+        id = 'patrol',
+        name = 'Patrol Unit',
     },
     {
-        id = 'efa',
-        name = 'Erweiterte Fahrzeug Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt eine Highspeed Unit zu fahren.',
-        mingrade = 3,
+        id = 'traffic',
+        name = 'Traffic Unit',
+    },
+    {
+        id = 'asd',
+        name = 'Air Support Unit',
+    },
+    {
+        id = 'detective',
+        name = 'Detective Unit',
+    },
+    {
+        id = 'swat',
+        name = 'SWAT Unit',
+    },
+}
+
+Config.Trainings = {
+    {
+        id = 'ga1',
+        name = 'Grundausbildung 1',
+        text = 'Theoretischer Teil der Grundausbildung.',
+        mingrade = 0,
+    },
+    {
+        id = 'ga2',
+        name = 'Grundausbildung 2',
+        text = 'Praktischer Teil der Grundausbildung',
+        mingrade = 0,
+    },
+    {
+        id = 'ewf',
+        name = 'Erweiterte Funk Ausbildung',
+        text = 'Zum erlangen von erweiterten Kenntnisse des Funkens. Notwendig für weitere Devisions.',
+        mingrade = 0,
     },
     {
         id = 'ewa',
-        name = 'Erweiterte Waffen Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt Langwaffen zu führen (Notwendig für SWAT).',
-        mingrade = 3,
+        name = 'Erweiterte Waffenausbildung',
+        text = 'Ermöglicht die Verwenung einer Langwaffe bei Freigabe eines Supervisors.',
+        mingrade = 1,
     },
     {
-        id = 'uia',
-        name = 'Untersuchungs & Informations Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt Beweise und DNA Spuren zu nehmen (Notwendig für Detective).',
-        mingrade = 4,
+        id = 'lfa',
+        name = 'Erweiterte Fahrausbildung',
+        text = 'Erwierte Taktiken im Zusammenhang mit Fahrzeugen.',
+        mingrade = 1,
     },
     {
-        id = 'lha',
-        name = 'Luft & Helikopter Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt Air Units und andere Flugobjekte zu bedienen.',
-        mingrade = 5,
+        id = 'mta',
+        name = 'Motorrad',
+        text = 'Ermöglicht das Fahren eines Polizei Motorrads in der Traffic Unit.',
+        mingrade = 0,
     },
     {
-        id = 'eta',
-        name = 'Erweiterte Taktik Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt Einsätze zu koordinieren & leiten.',
-        mingrade = 7,
-    },
-    {
-        id = 'eva',
-        name = 'Erweiterte Verhandlungs Ausbildung',
-        text = 'Mit dieser Ausbildung sind Beamte berechtigt Verhandlungen zu führen.',
-        mingrade = 7,
+        id = 'boot',
+        name = 'Boot',
+        text = 'Ermöglicht das Bedienen eines Polizei Bootes.',
+        mingrade = 0,
     },
 }
 
@@ -354,10 +378,13 @@ Config.Menus = {
     },
     training_add = {
         header = 'Ausbildung Erstellen',
-        label = 'Titel',
+        label = 'Ausbildung',
         description = 'Beschrebung',
-        time = 'Zeitpunkt',
+        time = 'Zeit',
+        location = 'Ort',
+        limit = 'Limit',
         officer = 'Teilnehmer',
+        supervisor = '2ter Ausbilder',
     },
     training_edit = {
         header = 'Ausbildung Bearbeiten',
@@ -367,10 +394,8 @@ Config.Menus = {
         officer = 'Teilnehmer',
     },
     training_delete = {
-        header = 'Ausbildung Löschen', 
-        text = 'Bist du dir sicher das du die Ausbildung %s löschen möchtest?',
-        confirm = 'Löschen',
-        cancel = 'Abbrechen',
+        header = 'Ausbildung Beenden', 
+        done = 'Hat dieser Beamte die Ausbildung bestanden?',
     },
     calc_law = {
         header = 'Rechner',
@@ -439,16 +464,29 @@ end
 Config.Settings = {
     status = {
         {status = 'n/A', color = 'grey'},
-        {status = '10-08', color = 'green', meaning = 'Dienst / Einsatz-Bereit '},
-        {status = '10-06', color = 'yellow' , meaning = 'Gebunden / Nicht Einsatzbereit'},
-        {status = '10-10', color = 'purple' , meaning = 'Kampf im Gange'},
-        {status = '10-14', color = 'purple' , meaning = 'Convoy im Gange'},
-        {status = '10-19', color = 'blue' , meaning = 'Rückfahrt zu ...'},
-        {status = '10-50', color = 'red' , meaning = 'Verunfallt / Feuer'},
-        {status = '10-76', color = 'yellow' , meaning = 'Anfahrt zu ...'},
-        {status = '10-86', color = 'orange' , meaning = 'Verkehrsanhaltung'},
-        {status = '10-97', color = 'red' , meaning = 'Schüsse auf Beamten abgefeuert'},
-        {status = '11-99', color = 'red' , meaning = 'Beamte getroffen / Verletzt'},
+        {status = '10-02', color = 'blue', meaning = 'Funkspruch empfangen'},
+        {status = '10-03', color = 'yellow' , meaning = 'Bestätige'},
+        {status = '10-04', color = 'purple' , meaning = 'Verstanden'},
+        {status = '10-06', color = 'red' , meaning = 'Beschäftigt'},
+        {status = '10-09', color = 'orange' , meaning = 'Wiederholen'},
+        {status = '10-97', color = 'red' , meaning = 'Nicht Einsatzbereit'},
+        {status = '10-08', color = 'green' , meaning = 'Einsatzbereit'},
+        {status = '10-10', color = 'yellow' , meaning = 'Benötige Verstärkung'},
+        {status = '10-20', color = 'orange' , meaning = 'Aktueller Standort'},
+        {status = '10-21', color = 'red' , meaning = 'Personenkontrolle'},
+        {status = '10-22', color = 'red' , meaning = 'Fahrzeugkontrolle'},
+        {status = '10-23', color = 'zellow' , meaning = 'Einsatzort angekommen'},
+        {status = '10-25', color = 'red' , meaning = 'Raub / Diebstahl'},
+        {status = '10-30', color = 'orange' , meaning = 'Täterbeschreibung'},
+        {status = '10-32', color = 'yellow' , meaning = 'Täter bewaffnet'},
+        {status = '10-35', color = 'orange' , meaning = 'Personenabfrage'},
+        {status = '10-36', color = 'orange' , meaning = 'Halterabfrage'},
+        {status = '10-40', color = 'purple' , meaning = 'Anfahrt zur Verstärkung'},
+        {status = '10-50', color = 'red' , meaning = 'Verunfallt'},
+        {status = '10-60', color = 'purple' , meaning = 'Verfolgungsjagd'},
+        {status = '10-65', color = 'purple' , meaning = 'Personenverfolgung'},
+        {status = '10-90', color = 'red' , meaning = 'Officer in Gefahr'},
+        {status = '10-99', color = 'red' , meaning = 'Schusswechsel'},
     },
     locations = {
         {status = 'n/A', color = 'grey'},
@@ -494,31 +532,37 @@ Config.Settings = {
         {status = 'n/A', color = 'grey'},
         {status = 'Lincoln', color = 'green'},
         {status = 'Adam', color = 'yellow'},
-        {status = 'King', color = 'red'},
+        {status = 'Airship', color = 'blue'},
         {status = 'David', color = 'orange'},
-        {status = 'Edward', color = 'green'},
+        {status = 'Mary', color = 'yellow'},
+        {status = 'Hotel', color = 'red'},
+        {status = 'Ocean', color = 'blue'},
+        {status = 'William', color = 'blue'},
+        {status = 'Henry', color = 'blue'},
+        {status = 'Sam', color = 'blue'},
+        {status = 'King', color = 'red'},
+        {status = 'Tom', color = 'red'},
+        {status = 'Victor', color = 'red'},
     },
     callStatus = {
         {status = 'Code-1', color = 'green', meaning = 'Dienstbereit / Kein Einsatz'},
+        {status = 'Code-1-H', color = 'green', meaning = 'Dienstbereit / Straßenregeln befreit'},
         {status = 'Code-2', color = 'green', meaning = 'Routine Einsatz'},
-        {status = 'Code-2-HIGH', color = 'orange', meaning = 'Priority Einsatz / Nur Blaulicht'},
         {status = 'Code-3', color = 'red', meaning = 'Notfall / Blaulicht & Sirene'},
         {status = 'Code-4', color = 'purple', meaning = 'Einsatz unter Kontrolle'},
-        {status = 'Code-6', color = 'red', meaning = 'Aktive Untersuchungen'},
+        {status = 'Code-4-ADAM', color = 'purple', meaning = 'Einsatz unter Kontrolle / Keine weiteren Einsatzmittel benötigt'},
+        {status = 'Code-5', color = 'purple', meaning = 'Risiko Stopp (10-22)'},
+        {status = 'Code-6', color = 'red', meaning = 'Fahrzeug verlassen'},
     },
     frequency = {
         {status = 'n/A', color = 'grey'},
         {status = '1.0', color = 'green', meaning = 'Dienstfunk'},
-        {status = '1.1', color = 'green', meaning = 'Dienstfunk (Starkauslastung)'},
-        {status = '1.2', color = 'orange', meaning = 'Einsatzfunk (Raub)'},
-        {status = '1.3', color = 'orange', meaning = 'Einsatzfunk (Juwelier)'},
-        {status = '1.4', color = 'orange', meaning = 'Einsatzfunk (Fleeca Bank)'},
-        {status = '1.5', color = 'orange', meaning = 'Einsatzfunk (Szaatsbank)'},
-        {status = '1.6', color = 'red', meaning = 'Einsatzkommunikation (Verhandlungsleitung)'},
-        {status = '1.7', color = 'red', meaning = 'Einsatzkommunikation (Taktikleitung)'},
-        {status = '1.8', color = 'grey', meaning = 'Funk Verfolgung (1)'},
-        {status = '1.9', color = 'grey', meaning = 'Funk Verfolgung (2)'},
-        {status = '2.0', color = 'purple', meaning = 'Jobrelevante Gespräche (Leitung)'},
+        {status = '1.1', color = 'orange', meaning = 'Private Gespräche (1)'},
+        {status = '1.2', color = 'orange', meaning = 'Private Gespräche (2)'},
+        {status = '1.3', color = 'orange', meaning = 'Private Gespräche (3)'},
+        {status = '1.6', color = 'grey', meaning = 'Ausbildungsfunk (1)'},
+        {status = '1.7', color = 'grey', meaning = 'Ausbildungsfunk (2)'},
+        {status = '1.8', color = 'grey', meaning = 'Ausbildungsfunk (3)'},
         {status = '3.0', color = 'purple', meaning = 'Geteilter Funk (AMR)'},
         {status = '4.0', color = 'purple', meaning = 'Geteilter Funk (LAFD)'},
     },
@@ -568,13 +612,17 @@ Config.Clasifications = {
     patrol = {
         'Lincoln',
         'Adam',
-        'Edward',
+        'Mary',
+        'Hotel',
     },
     king = {
         'King',
+        'Victor',
+        'Tom',
     },
     swat = {
-        'David',
+        'William',
+        'Henry',
     },
 }
 
