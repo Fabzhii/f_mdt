@@ -98,9 +98,11 @@ ALTER TABLE `f_mdt_todos`
 CREATE TABLE `f_mdt_trainings` (
   `label` varchar(46) DEFAULT NULL, 
   `description` longtext DEFAULT NULL,
-  `supervisor` varchar(46) DEFAULT NULL,
+  `supervisor` longtext DEFAULT NULL,
   `time` longtext DEFAULT NULL,
+  `location` longtext DEFAULT NULL,
   `list` longtext DEFAULT NULL,
+  `limit` varchar(46) NOT NULL DEFAULT 10,
   `identifier` varchar(46) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -118,6 +120,7 @@ ALTER TABLE `users`
     ADD COLUMN `editinfo` LONGTEXT NOT NULL DEFAULT '{"telefon":"n/A","email":"n/A","job":"n/A"}',
     ADD COLUMN `callNumber` int(11) NOT NULL DEFAULT 999,
     ADD COLUMN `badgeNumber` varchar(10) NOT NULL DEFAULT 'n/A',
+    ADD COLUMN `unit` varchar(46) NOT NULL DEFAULT 'patrol',
     ADD COLUMN `notes` LONGTEXT NOT NULL DEFAULT '[]',
     ADD COLUMN `opened_files` LONGTEXT NOT NULL DEFAULT '[]',
     ADD COLUMN `closed_files` LONGTEXT NOT NULL DEFAULT '[]',
@@ -130,6 +133,6 @@ ALTER TABLE `owned_vehicles`
     ADD COLUMN `wanted` int(11) NOT NULL DEFAULT 0;
 
 ALTER TABLE `job_grades` 
-    ADD COLUMN `permissions` LONGTEXT NOT NULL DEFAULT '{"citizenEditFile":true,"editListVehicle":true,"createListOutfit":true,"openTracking":true,"citizenOpenVehicles":true,"openWeapons":true,"editPermissions":true,"openVehicles":true,"citizenEditNote":true,"dispatchEditDispatch":true,"editListTodo":true,"openDashboard":true,"trackPlate":true,"openSettings":true,"citizenCreateFile":true,"createInformation":true,"createListVehicle":true,"checkListTraining":true,"openCalculator":true,"createListTodo":true,"openControlCenter":true,"citizenEditWanted":true,"createListTraining":true,"openDispatches":true,"trackNumber":true,"citizenOpenWeapons":true,"editListOutfit":true,"editListTraining":true,"dispatchEditOfficer":true,"citizenEditLicense":true,"citizenCreateNote":true,"citizenEditPersonalData":true,"openLists":true,"checkListTodo":true,"createListEmployee":true,"openCitizen":true,"editListEmployee":true}';
+    ADD COLUMN `permissions` LONGTEXT NOT NULL DEFAULT '{"citizenEditFile":false,"editListVehicle":false,"createListOutfit":false,"openTracking":false,"citizenOpenVehicles":false,"openWeapons":false,"editPermissions":false,"openVehicles":false,"citizenEditNote":false,"dispatchEditDispatch":false,"editListTodo":false,"openDashboard":false,"trackPlate":false,"openSettings":false,"citizenCreateFile":false,"createInformation":false,"createListVehicle":false,"checkListTraining":false,"openCalculator":false,"createListTodo":false,"openControlCenter":false,"citizenEditWanted":false,"createListTraining":false,"openDispatches":false,"trackNumber":false,"citizenOpenWeapons":false,"editListOutfit":false,"editListTraining":false,"dispatchEditOfficer":false,"citizenEditLicense":false,"citizenCreateNote":false,"citizenEditPersonalData":false,"openLists":false,"checkListTodo":false,"createListEmployee":false,"openCitizen":false,"editListEmployee":false}';
 
 
