@@ -144,6 +144,13 @@ function showMenu(information, settings, page) {
             }
             showListen(information);
         }
+        if(page == 'lists'){
+            if(!(information.self.permissions.openDocuments)){
+                showNoPermissions();
+                return;
+            }
+            showBerichte(information);
+        }
         if(page == 'settings'){
             if(!(information.self.permissions.openSettings)){
                 showNoPermissions();
@@ -282,7 +289,18 @@ function showMenu(information, settings, page) {
         }).then(() => {})
     });
 
+    document.getElementById('berichte').addEventListener('click', function() {
 
+        if(!(information.self.permissions.openDocuments)){
+            showNoPermissions();
+            return;
+        }
+
+        resetButtonColors();
+        document.getElementById('berichte').style.color = blue;
+        resetPages();
+        showBerichte(information);
+    });
 
     document.getElementById('einstellungen').addEventListener('click', function() {
 
@@ -2367,6 +2385,7 @@ function showMenu(information, settings, page) {
             function showListVehicles(){
                 axios.post(`https://${GetParentResourceName()}/listGetVehicles`, {}).then((response) => {
                     const vehicles = response.data;
+
                     const page = document.getElementById('list-body');
 
                     const remove = document.querySelectorAll('.officer-categorie-div');
@@ -2914,7 +2933,7 @@ function showMenu(information, settings, page) {
 
                             const oJail = document.createElement('div');
                             oJail.className = 'officer-list-individual-info';
-                            oJail.innerText = lawSettings.prison.prefix + lw.prison + lawSettings.prison.suffix;
+                            oJail.innerText = lawSettings.prison.prefix + (lw.prison || 0) + lawSettings.prison.suffix;
                             categorieHeader.appendChild(oJail);
 
                             const oWork = document.createElement('div');
@@ -2955,89 +2974,107 @@ function showMenu(information, settings, page) {
 
 
                     ausbildungen.forEach(ausbildung => {
-                        
-                        const tDiv = document.createElement('div');
-                        tDiv.className = 'todo-list-page-div';
-                        ausbildungenPage.appendChild(tDiv);
 
-                        const tName = document.createElement('div');
-                        tName.className = 'officer-list-individual-info';
-                        tName.innerText = ausbildung.label;
-                        tDiv.appendChild(tName);
+                        if(ausbildung.invisible != true) {
 
-                        const tDesc = document.createElement('div');
-                        tDesc.className = 'officer-list-individual-info';
-                        tDesc.style.width = '150%';
-                        tDesc.innerText = ausbildung.description;
-                        tDiv.appendChild(tDesc);
+                            const tDiv = document.createElement('div');
+                            tDiv.className = 'todo-list-page-div';
+                            ausbildungenPage.appendChild(tDiv);
 
-                        const tOffc = document.createElement('div');
-                        tOffc.className = 'officer-list-individual-info';
-                        tOffc.innerText = ausbildung.supervisor;
-                        tDiv.appendChild(tOffc);
+                            const tName = document.createElement('div');
+                            tName.className = 'officer-list-individual-info';
+                            tName.innerText = ausbildung.label;
+                            tDiv.appendChild(tName);
 
-                        const tTime = document.createElement('div');
-                        tTime.className = 'officer-list-individual-info';
-                        tTime.innerText = ausbildung.time;
-                        tDiv.appendChild(tTime);
+                            const tDesc = document.createElement('div');
+                            tDesc.className = 'officer-list-individual-info';
+                            tDesc.style.width = '150%';
+                            tDesc.innerText = ausbildung.description;
+                            tDiv.appendChild(tDesc);
 
-                        const tAsgnd = document.createElement('div');
-                        tAsgnd.style.width = '50%';
-                        if (ausbildung.asigned == false){
-                            tAsgnd.className = 'officer-list-individual-info fa-regular fa-square todo-list-btn';
-                        }else {
-                            tAsgnd.className = 'officer-list-individual-info fa-regular fa-square-check todo-list-btn';
+                            const tOffc = document.createElement('div');
+                            tOffc.className = 'officer-list-individual-info';
+                            tOffc.innerText = ausbildung.supervisor;
+                            tDiv.appendChild(tOffc);
+
+                            const tTime = document.createElement('div');
+                            tTime.className = 'officer-list-individual-info';
+                            tTime.style.width = '50%';
+                            tTime.innerText = ausbildung.time;
+                            tDiv.appendChild(tTime);
+
+                            const tLoc = document.createElement('div');
+                            tLoc.className = 'officer-list-individual-info';
+                            tLoc.style.width = '50%';
+                            tLoc.innerText = ausbildung.location;
+                            tDiv.appendChild(tLoc);
+
+                            const tLimit = document.createElement('div');
+                            tLimit.className = 'officer-list-individual-info';
+                            tLimit.style.width = '75%';
+                            tLimit.innerText = 'Teilnehmer: ' + (ausbildung.list).length + '/' + ausbildung.limit;
+                            tDiv.appendChild(tLimit);
+
+                            const tAsgnd = document.createElement('div');
+                            tAsgnd.style.width = '50%';
+                            if (ausbildung.asigned == false){
+                                tAsgnd.className = 'officer-list-individual-info fa-regular fa-square todo-list-btn';
+                            }else {
+                                tAsgnd.className = 'officer-list-individual-info fa-regular fa-square-check todo-list-btn';
+                            }
+                            tDiv.appendChild(tAsgnd);
+
+                            const tBtn = document.createElement('div');
+                            tBtn.className = 'officer-list-individual-info list-officer-btn';
+                            tBtn.style.width = '50%';
+                            tDiv.appendChild(tBtn);
+
+                            const vEdit = document.createElement('div');
+                            vEdit.className = 'fa-solid fa-pen-to-square list-officer-btn-one';
+                            tBtn.appendChild(vEdit);
+
+                            const vDel = document.createElement('div');
+                            vDel.className = 'fa-solid fa-circle-check list-officer-btn-one';
+                            tBtn.appendChild(vDel);
+
+                            tAsgnd.onclick = function() {
+
+                                if(!(information.self.permissions.checkListTraining)){
+                                    showNoPermissions();
+                                    return;
+                                }
+
+                                axios.post(`https://${GetParentResourceName()}/ausbildungListAsign`, {
+                                    ausbildung,
+                                }).then(() => {showListAusbildungen();})
+                            };
+
+                            vDel.onclick = function() {
+
+                                if(!(information.self.permissions.editListTraining)){
+                                    showNoPermissions();
+                                    return;
+                                }
+
+                                axios.post(`https://${GetParentResourceName()}/ausbildungListDelete`, {
+                                    ausbildung,
+                                }).then(() => {showListAusbildungen();})
+                            };
+
+                            vEdit.onclick = function() {
+
+                                if(!(information.self.permissions.editListTraining)){
+                                    showNoPermissions();
+                                    return;
+                                }
+
+                                axios.post(`https://${GetParentResourceName()}/ausbildungListEdit`, {
+                                    ausbildung,
+                                }).then(() => {showListAusbildungen();})
+                            };
+
                         }
-                        tDiv.appendChild(tAsgnd);
-
-                        const tBtn = document.createElement('div');
-                        tBtn.className = 'officer-list-individual-info list-officer-btn';
-                        tBtn.style.width = '50%';
-                        tDiv.appendChild(tBtn);
-
-                        const vEdit = document.createElement('div');
-                        vEdit.className = 'fa-solid fa-pen-to-square list-officer-btn-one';
-                        tBtn.appendChild(vEdit);
-
-                        const vDel = document.createElement('div');
-                        vDel.className = 'fa-solid fa-trash list-officer-btn-one';
-                        tBtn.appendChild(vDel);
-
-                        tAsgnd.onclick = function() {
-
-                            if(!(information.self.permissions.checkListTraining)){
-                                showNoPermissions();
-                                return;
-                            }
-
-                            axios.post(`https://${GetParentResourceName()}/ausbildungListAsign`, {
-                                ausbildung,
-                            }).then(() => {showListAusbildungen();})
-                        };
-
-                        vDel.onclick = function() {
-
-                            if(!(information.self.permissions.editListTraining)){
-                                showNoPermissions();
-                                return;
-                            }
-
-                            axios.post(`https://${GetParentResourceName()}/ausbildungListDelete`, {
-                                ausbildung,
-                            }).then(() => {showListAusbildungen();})
-                        };
-
-                        vEdit.onclick = function() {
-
-                            if(!(information.self.permissions.editListTraining)){
-                                showNoPermissions();
-                                return;
-                            }
-
-                            axios.post(`https://${GetParentResourceName()}/ausbildungListEdit`, {
-                                ausbildung,
-                            }).then(() => {showListAusbildungen();})
-                        };
+                        
                     });
 
                     const ausbildungPlus = document.createElement('div');
@@ -3059,6 +3096,12 @@ function showMenu(information, settings, page) {
             };
         };
 
+    };
+
+    function showBerichte(information){
+        axios.post(`https://${GetParentResourceName()}/getBerichte`, {}).then((response) => {
+
+        });
     };
 
 
@@ -3249,7 +3292,7 @@ function showMenu(information, settings, page) {
     
             const registededField = document.createElement('div');
             registededField.className = 'result-btn-field-info';
-            registededField.innerText = 'Gegistriert: \n' + toCheckMark(result.registered);
+            registededField.innerText = 'Registriert: \n' + toCheckMark(result.registered);
             infoDiv.appendChild(registededField);
     
             const warrentField = document.createElement('div');

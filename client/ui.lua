@@ -563,12 +563,7 @@ RegisterNUICallback('editDispatch', function(data, cb)
         {type = 'select', label = Config.Menus.edit_dispatch.code, required = true, options = options, default = code},
     })
     if input ~= nil then 
-        for k,v in pairs(dispatches) do 
-            if v.identifier == identifier then
-                dispatches[k].code = input[1]
-            end 
-        end 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+        TriggerServerEvent('fmdt:editDispatch', identifier, input[1], nil)
     end 
 
     Citizen.Wait(20)
@@ -596,13 +591,7 @@ RegisterNUICallback('deleteDispatch', function(data, cb)
         }
     })
     if alert == 'confirm' then 
-        local dispatches = GlobalState.mdtCalls
-        for k,v in pairs(dispatches) do 
-            if v.identifier == identifier then
-                table.remove(dispatches, k)
-            end 
-        end 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+        TriggerServerEvent('fmdt:removeDispatch', identifier)
     end
 
     Citizen.Wait(20)
@@ -640,12 +629,7 @@ RegisterNUICallback('officerDispatch', function(data, cb)
             {type = 'multi-select', label = Config.Menus.edit_dispatch_officers.officer, options = options, default = officers, searchable = true},
         })
         if input ~= nil then 
-            for k,v in pairs(dispatches) do 
-                if v.identifier == identifier then
-                    dispatches[k].officer = input[1]
-                end 
-            end 
-            TriggerServerEvent('fmdt:addDispatch', dispatches, true)
+            TriggerServerEvent('fmdt:editDispatch', identifier, nil, input[1])
         end 
 
         Citizen.Wait(20)
@@ -721,21 +705,25 @@ RegisterNUICallback('setOfficerDispatch', function(data, cb)
         })
         if input ~= nil then 
             for k,v in pairs(dispatches) do 
+                Citizen.Wait(5)
                 for o,i in pairs(v.officer) do 
                     if i == name then 
-                        table.remove((dispatches[k].officer), o)
+                        local newOfficer = v.officer
+                        table.remove(newOfficer, o)
+                        TriggerServerEvent('fmdt:editDispatch', v.identifier, nil, newOfficer)
                     end 
                 end 
 
                 for o,i in pairs(input[1]) do 
                     if i == v.identifier then 
-                        table.insert((dispatches[k].officer), name)
+                        local newOfficer = v.officer
+                        table.insert(newOfficer, name)
+                        TriggerServerEvent('fmdt:editDispatch', v.identifier, nil, newOfficer)
                     end 
                 end
             end 
         end 
 
-        TriggerServerEvent('fmdt:addDispatch', dispatches, true)
         Citizen.Wait(20)
         exports[GetCurrentResourceName()]:openMDT('dispatches')
         cb()

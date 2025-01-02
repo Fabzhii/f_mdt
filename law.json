@@ -1,32 +1,463 @@
 [
     {
-        "categorie": "STVO",
+        "categorie": "StVO",
         "paragraphs": [
             {
-                "description": "Bewegen zu schnell",
-                "label": "30 KM/H+",
-                "fine": 5500,
-                "prison": 30,
+                "description": "Das Organisieren, Mitfahren oder Unterstützen von nicht genemigten Rennen auf öffentlichen Straßen.",
+                "label": "Illegales Straßenrennen",
+                "fine": 6000,
+                "prison": null,
+                "c_service": 5
+            },
+            {
+                "description": "Das Missachten von Ampeln, Parkflächen, Sperrlinien oder anderen Verkehrsregeln.",
+                "label": "Missachten der Verkehrregeln",
+                "fine": 2000,
+                "prison": null,
                 "c_service": null
             },
             {
-                "description": "Bewegen zu schnell 2",
-                "label": "60 KM/H+",
-                "fine": 7500,
-                "prison": 50,
+                "description": " Das Fahren eines KFZ's mit 5 km/h über der erlaubten Geschwindigkeit.",
+                "label": "Fahren mit überhöhter Geschwindigkeit > 5 km/h",
+                "fine": 2000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Fahren eines KFZ's mit 15 km/h über der erlaubten Geschwindigkeit.",
+                "label": "Fahren mit überhöhter Geschwindigkeit > 15 km/h",
+                "fine": 4000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Fahren eines KFZ's mit 30 km/h über der erlaubten Geschwindigkeit.",
+                "label": "Fahren mit überhöhter Geschwindigkeit > 30 km/h",
+                "fine": 6000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Fahren eines KFZ's mit doppelter Geschwindigkeit wie erlaubt. Bei Verstoß musst die Fahrerlaubnis entzogen werden.",
+                "label": "Fahren mit doppelter Geschwindigkeit wie erlaubt ",
+                "fine": 8000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Grundlose Hupen in der Öffentlichkiet.",
+                "label": "Missbrauchen der Hupe",
+                "fine": 500,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines KFZs auf öffentlichen Straßen ohne gültige Fahrerlaubnis.",
+                "label": "Fahren ohne Lizenz",
+                "fine": 5000,
+                "prison": 10,
+                "c_service": null
+            },
+            {
+                "description": "Das Fahren unter Einfluss von bewusstseinsverändernden Substanzen.",
+                "label": "Fahren unter Einfluss von Alkohol oder BTM",
+                "fine": 5000,
+                "prison": 20,
+                "c_service": null
+            },
+            {
+                "description": "Die Gefährdung der Öffentlichkeit durch mutwilligen STvO Verstoß.",
+                "label": "Rücksichtsloses Fahren",
+                "fine": 4000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Kraftfahrzeugs ohne aktiviertes Licht.",
+                "label": "Fahren ohne Licht",
+                "fine": 800,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Kraftfahrzeugs ohne verbautes Kennzeichen.",
+                "label": "Fahren ohne Kennzeichen",
+                "fine": 2000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Kraftfahrzeugs ohne gültige Registrierung oder Anmeldung(Fahrzeuge von staatlichen Diesten müssen nicht angemeldet werden).",
+                "label": "Fahren ohne Anmeldung/Regisrierung",
+                "fine": 2000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Fahrzeugs mit aktiver N2O Einspritzung.",
+                "label": "NOS-Modifikation",
+                "fine": 3000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Fahrzeugs mit einer Polizei Hupe oder Kennzeichen.",
+                "label": "Polizei-Modifikationen",
+                "fine": 6000,
+                "prison": 20,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Fahrzeugs mit aktivierten Gelblicht(Mechaniker ausgeschlossen).",
+                "label": "Gelblicht-Modifikation",
+                "fine": 3000,
+                "prison": 20,
+                "c_service": null
+            }
+
+        ]
+    },
+    {
+        "categorie": "WaffG",
+        "paragraphs": [
+            {
+                "description": "das offene oder geholsterte Tragen von Schusswaffen in der Stadt. Das halten von Schusswaffen in der Öffentlichkeit könnte auch unter Rücksichtsloses Verhalten fallen. Bei Verstoß kann die Waffenlizenz entzogen werden.",
+                "label": "Illegales Tragen von Schusswaffen",
+                "fine": 7000,
+                "prison": null,
+                "c_service": 18
+            },
+            {
+                "description": "Sollte beim fahrlässigen Abfeuern jeglicher Schusswaffe ein Person nachweislich zu Schaden kommen, so muss die Person bestraft werden.",
+                "label": "Fahrlässiges Abfeuern einer Schusswaffe mit Personenschaden",
+                "fine": 8000,
+                "prison": 40,
+                "c_service": null
+            },
+            {
+                "description": "Der Besitz einer illegaler erworbenen Handfeuerwaffe bzw. einer Verbotenen Handfeuerwaffe.",
+                "label": "Besitz illegaler Handfeuerwaffen",
+                "fine": 7000,
+                "prison": 20,
+                "c_service": null
+            },
+            {
+                "description": "Der Besitz von illegalen Reihenfeuerwaffen (umgangsstrachlichs SMGs) und oder Langwaffen.",
+                "label": "Besitz illegaler Reihenfeuerwaffen und Langwaffen",
+                "fine": 10000,
+                "prison": 60,
+                "c_service": null
+            },
+            {
+                "description": "Der Verkauf/Weitergabe/Leasing von legalen Waffen darf nur mit Abfrage des Waffenscheins und mit einer gültigen Lizenz passieren. Ausnahme es handelt sich um eine legale Waffe und beide Personen besitzen einen Waffenschen. Bei Verstoß kann die Waffenlizenz des Verkäufers entzogen werden",
+                "label": "Nicht lizenzierter Verkauf von Schusswaffen",
+                "fine": 15000,
+                "prison": 40,
                 "c_service": null
             }
         ]
     },
     {
-        "categorie": "WAFFG",
+        "categorie": "StGB",
         "paragraphs": [
             {
-                "description": "Wenn ein Täter eine illegaler Waffe führt",
-                "label": "Illegaler Waffenbesitz",
-                "fine": 5500,
-                "prison": 50,
+                "description": "Eine Person so Stark verletzt das diese für Tot erklärt wurde",
+                "label": "Mord",
+                "fine": 16000,
+                "prison": 100,
+                "c_service": null
+            },
+            {
+                "description": "Einer Person zu Helfen, einen Mord zu begehen",
+                "label": "Beihilfe zum Mord",
+                "fine": 10000,
+                "prison": 80,
+                "c_service": null
+            },
+            {
+                "description": "Jeder Mord, welcher durch eine Reanimation des LAMD/AMR/LAFD verhindert werden kann.",
+                "label": "Versuchter Mord",
+                "fine": 7000,
+                "prison": 60,
+                "c_service": null
+            },
+            {
+                "description": "Eine vorsetzliche Hilfe eines Anderen zum Mord",
+                "label": "Beihilfe zum versuchten Mord",
+                "fine": 5000,
+                "prison": 40,
+                "c_service": null
+            },
+            {
+                "description": "Eine Körperliche Mishandlung oder Schädigung der Gesundheit eines Anderen.",
+                "label": "Körper Verletzung",
+                "fine": 3000,
+                "prison": 20,
+                "c_service": null
+            },
+            {
+                "description": "Eine Drohung an eine Person diese körperlich gesundheitlich zu schädigen.",
+                "label": "Drohung",
+                "fine": 2000,
+                "prison": 10,
+                "c_service": null
+            },
+            {
+                "description": "Sollte ein Bürger vorsätzlich seine Rechnungen nicht begleichen, so muss er pro $1000 5 Sozialstunden abarbeiten. (Ausnahme: Person konnte wegen diversen Gründen den Staat nicht betreten)",
+                "label": "Vorsätzliches Nichtbegleichen offener Rechnungen",
+                "fine": 3000,
+                "prison": null,
+                "c_service": 5
+            },
+            {
+                "description": "Der Besitz von nicht registrierten Scheinen(Ohne gültige $-Nummer oder Rot Markiert) bei einem Betrag von unter 25.000$.",
+                "label": " Besitz von Schwarzgeld im mittelschweren Fall",
+                "fine": 10000,
+                "prison": 40,
+                "c_service": null
+            },
+            {
+                "description": "Der Besitz von nicht registrierten Scheinen(Ohne gültige $-Nummer oder Rot Markiert) bei einem Betrag von über 24.999$..",
+                "label": "Besitz von Schwarzgeld im schweren Fall",
+                "fine": 12000,
+                "prison": 60,
+                "c_service": null
+            },
+            {
+                "description": "Der Missbrauch eines Notrufes an das LAPD/LAFD/AMR/LAMD. Dazu zählen auch unnötige Anfragen(Die Nötigkeit wird vom Richter entschieden). Sollte eine Person nach dem Betätigen des Notfallarmbandes verschleppt werden, so muss die Person, die denjenigen verschleppt hat, die Anfahrtskosten bezahlen.",
+                "label": "Misbrauch des Notrufes",
+                "fine": 3000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das weitergeben staatlicher Information als ehemaliger Staatsbediensteter wie zum Beispiel Akten, Namen von Beamten oder Personen auf der Fahndungsliste.",
+                "label": "Landesverrat",
+                "fine": 17000,
+                "prison": 100,
+                "c_service": null
+            },
+            {
+                "description": "Der Konstum von alkoholischen Getränken auf öffentlichen Grund und Boden.",
+                "label": "Kunsum von Alkohol in der Öffentlichkeit",
+                "fine": 3000,
+                "prison": null,
                 "c_service": 20
+            },
+            {
+                "description": "Das Stören in der Öffentlichkeit durch negatives Auftreten.",
+                "label": "Erregung öffentlichen Ärgernisses.",
+                "fine": 600,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das mutwillige Zerstören von nicht eigenem Eigentum wie zum Beispiel Immobilien.",
+                "label": "Vandalismus",
+                "fine": 4000,
+                "prison": null,
+                "c_service": 5
+            },
+            {
+                "description": "Die Beihilfe zur Straftat (u.a Bereitstellen eines Fahrzeugs zur Flucht) wird ebenfalls bestraft.",
+                "label": "Beihilfe einer Straftat",
+                "fine": 5000,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste Vortäuschen jeglicher Straftaten.",
+                "label": "Vortäuschen einer Straftat",
+                "fine": 900,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste Stören der öffentlichen Ordnung, randalieren, Unruhe stiften, Widerstand leisten, auf Anordnungen Staatsbeamter nicht hören oder eine rechtmäßige Versammlung stören.",
+                "label": "Ordnungswidriges Verhalten",
+                "fine": 2000,
+                "prison": null,
+                "c_service": 10
+            },
+            {
+                "description": "Ein Verhalten einer Person, das die Gesundheit von sich selbst oder anderen schädigen könnte.",
+                "label": "Rücksichtsloses Verhalten",
+                "fine": 500,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Bewegen eines Bürgers über eine Distanz ohne Einverständnis mit Einfluss von Gewalt oder Angst.",
+                "label": "Entführung",
+                "fine": 6000,
+                "prison": 40,
+                "c_service": null
+            },
+            {
+                "description": "Eine Person  wird absichtlich und rechtswidrig zurückgehalten,festgenommen oder eingesperrt.",
+                "label": "Freiheitsberaubung",
+                "fine": 4000,
+                "prison": 25,
+                "c_service": null
+            },
+            {
+                "description": "Der Versuch sich zu bereichern durch die Androhung von Gewalt, die Androhung von Weitergaben persönlicher Informationen oder die Androhung eines empfindlichen Übels.",
+                "label": "Erpressung",
+                "fine": 3000,
+                "prison": 10,
+                "c_service": null
+            },
+            {
+                "description": "Das Festhalten und Bedrohen einer Person um sich selbst zu schützen und sich durch das Leben der Geisel zu bereichern.",
+                "label": "Geiselnahme",
+                "fine": 10000,
+                "prison": 50,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste Ausrauben der Nationalbank oder der Aservatenkammer des LAPDs.",
+                "label": "Schwerer Raub",
+                "fine": 10000,
+                "prison": 50,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste Ausrauben des Juweliers, oder von Banken",
+                "label": "Mittelschwerer Raub",
+                "fine": 7000,
+                "prison": 30,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste Ausrauben von Tankstellen, Läden und ATM's.",
+                "label": "Leichter Raub",
+                "fine": 5000,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Das bewusste rechtswidrige Eindrigen eines Grundstück ohne Genemigung.",
+                "label": "Hausfriedensbruch",
+                "fine": 2500,
+                "prison": 10,
+                "c_service": null
+            },
+            {
+                "description": "Das Vorsätzliche Ablehnen oder Nichteinhalten von rechtmäßigen Signalen oder Anweisungen von Staatsbeamte.",
+                "label": "Nichtbeachten einer rechtmäßigen Anordnung",
+                "fine": 2000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Behindern von Staatsanwälte, Richter oder Dergleichen während der Arbeit.",
+                "label": "Behinderung der Justiz",
+                "fine": 3500,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Das Vörsätzliche leisten von Widerstand bei einer Festnahme von sich selbst oder anderen.",
+                "label": "Widerstand gegen eine Festnahme.",
+                "fine": 3000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das vorlgen von fehlerhaften oder gar keinen Dokumenten.",
+                "label": "Fehler bei der Identifizierung",
+                "fine": 3000,
+                "prison": null,
+                "c_service": null
+            },
+            {
+                "description": "Das Flüchten von Staatsbeamten ohne Kontakt zuvor.",
+                "label": "Verbrecherisches Flüchten",
+                "fine": 6000,
+                "prison": 30,
+                "c_service": null
+            },
+            {
+                "description": "Die Mithilfe einer verbrecherischen Flucht eines Anderen durch eine Blockade oder eine Abholung.",
+                "label": "Beihilfe zu Flucht.",
+                "fine": 3000,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Der Diebstahl eines fremden KFZ's.",
+                "label": "Fahrzeugdiebstahl",
+                "fine": 5000,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Der Versuch einer anderen Person ein KFZ zu stehlen.",
+                "label": "Versuchter Fahrzeugdiebstahl",
+                "fine": 5000,
+                "prison": 20,
+                "c_service": null
+            },
+            {
+                "description": "Das Zerstören von Staatseigentum. Bei Beschuss auf Reifen kann das Fahrlässiges Abfeuern einer Schusswaffe angehängt werden.",
+                "label": "Zerstörung von Staatseigentum",
+                "fine": 7000,
+                "prison": null,
+                "c_service": 12
+            },
+            {
+                "description": "Wer sich als Beamter ausgibt um eine andere Personen zu Täuschen.",
+                "label": "Amtsanmahßung",
+                "fine": 7000,
+                "prison": 10,
+                "c_service": null
+            }        
+        ]
+    },
+    {
+        "categorie": "BtMG",
+        "paragraphs": [
+            {
+                "description": "Der besitz von BTM unter einer Stückzahl von 10 Stück. Sollten mehrere Arten von BTM aufgefunden werden, so wird addiert.",
+                "label": "Besitz von BTM",
+                "fine": 5500,
+                "prison": 15,
+                "c_service": null
+            },
+            {
+                "description": "Der besitz von BTM über einer Stückzahl von 9 Stück. Sollten mehrere Arten von BTM aufgefunden werden, so wind addiert.",
+                "label": "Besitz von BTM mit Verkaufsabsicht",
+                "fine": 8000,
+                "prison": 25,
+                "c_service": null
+            },
+            {
+                "description": "Das Herstellen von Crystal Meth.",
+                "label": "Herstellung von Crystal Meth",
+                "fine": 7000,
+                "prison": 25,
+                "c_service": null
+            },
+            {
+                "description": "Der Anbau von Cannabis.",
+                "label": "Produktion von Cannabis",
+                "fine": 6000,
+                "prison": 25,
+                "c_service": null
+            },
+            {
+                "description": "Die Herstellung und oder Verarbeiten von anderwertigen Drogen.",
+                "label": "Pdroduktion von anderweriten Drogen",
+                "fine": 7000,
+                "prison": 25,
+                "c_service": null
+            },
+            {
+                "description": "Der Konsum von BTM in der Öffentlichkeit.",
+                "label": "BTM Konsum",
+                "fine": 7000,
+                "prison": null,
+                "c_service": 10
             }
         ]
     }
