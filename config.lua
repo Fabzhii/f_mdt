@@ -96,7 +96,7 @@ Config.Lists = {
         showEmptyCategories = true,
     },
     outfits = {
-        defaultURL = 'https://cdn.discordapp.com/attachments/1101547475346665573/1292165814476341248/no-outfit.png?ex=6702beb1&is=67016d31&hm=a99f3495b3995be9f664852046fa4bb99dfc45e395e56302265bc690c5926081&',
+        defaultURL = '',
     },
     law = {
         fine = {
