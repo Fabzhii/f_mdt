@@ -1,6 +1,6 @@
 Config = {}
 
-Config.ApiKey = '27043423ed59abfaebd689570061bb48'
+Config.ApiKey = ''
 
 Config.Tablet = {
     itemrequired = false,
